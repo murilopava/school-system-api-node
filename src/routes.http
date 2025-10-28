@@ -1,0 +1,17 @@
+POST http://localhost:3000/aluno
+Content-Type: application/json
+
+{
+    "aluno": "Roberto",
+    "turma": "2B",
+    "notas": [
+        {"disciplina": "matemática", "nota": 8},
+        {"disciplina": "história", "nota": 9}
+    ],
+    "media": 8.5  
+}
+
+###
+
+GET http://localhost:3000/alunos
+Content-Type: application/json
