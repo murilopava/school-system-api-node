@@ -1,13 +1,15 @@
 {
   "dependencies": {
-    "fastify": "^5.6.1"
+    "dotenv": "^17.2.3",
+    "fastify": "^5.6.1",
+    "pg": "^8.16.3",
+    "postgres": "^3.4.7"
   },
   "name": "sistema-escolar",
   "version": "1.0.0",
   "description": "",
   "type": "module",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npm --watch src/server.js"
