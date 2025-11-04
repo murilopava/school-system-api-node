@@ -42,4 +42,16 @@ export class DatabaseAlunosFake {
     
     return console.log('não encontrou!')
   }
+
+  async delete(id) {
+    const alunoIndex = this.alunos.findIndex(a => a.id === id)
+
+    this.findAll()
+    
+    if (alunoIndex !== -1) {
+      return this.alunos[alunoIndex] = {}
+    }
+
+    return "Aluno não encontrado"
+  }
 }

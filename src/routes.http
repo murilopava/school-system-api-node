@@ -31,3 +31,7 @@ Content-Type: application/json
     ],
     "media": 8.5  
 }
+
+###
+
+DELETE http://localhost:3000/aluno/4b789bb2-b227-4964-84bd-e450582ff223

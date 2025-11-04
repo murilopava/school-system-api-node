@@ -1,6 +1,7 @@
 import { fastify } from 'fastify'
 import { DatabaseAlunos } from './database/alunos-database.js'
 import { DatabaseAlunosFake } from './database/alunos-database-fake.js'
+import { request } from 'http'
 
 const server = fastify()
 const dbAlunos = new DatabaseAlunos
@@ -24,8 +25,16 @@ server.post('/aluno', (request, reply) => {
     
 })
 
-server.put('/aluno/:aluno', (request, reply) => {
-    const id = request.params.aluno
+server.delete('/aluno/:id', (request, reply) => {
+    const id = request.params.id
+
+    dbAlunosFake.delete(id)
+    dbAlunosFake.findAll()
+    return reply.status(200).send()
+})
+
+server.put('/aluno/:id', (request, reply) => {
+    const id = request.params.id
     const aluno = request.body
     
     dbAlunosFake.put(id, aluno.nome, aluno.turma, aluno.notas)
