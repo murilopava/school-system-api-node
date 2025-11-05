@@ -7,8 +7,7 @@ Content-Type: application/json
     "notas": [
         {"disciplina": "matemática", "nota": 8},
         {"disciplina": "história", "nota": 9}
-    ],
-    "media": 8.5  
+    ] 
 }
 
 ###
@@ -18,18 +17,17 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:3000/aluno/7fadea4b-34ab-4bf0-b1d9-0749391e569a
+PUT http://localhost:3000/aluno/a28c3052-5b1d-4eec-b6c9-12202cc1ba18
 Content-Type: application/json
 
 {
     "nome": "Matheus",
-    "turma": "2A",
+    "turma": "2B",
     "notas": [
         {"disciplina": "matemática", "nota": 8},
         {"disciplina": "história", "nota": 9},
         {"disciplina": "biologia", "nota": 6}
-    ],
-    "media": 8.5  
+    ] 
 }
 
 ###

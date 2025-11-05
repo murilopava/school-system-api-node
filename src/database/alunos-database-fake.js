@@ -49,7 +49,9 @@ export class DatabaseAlunosFake {
     this.findAll()
     
     if (alunoIndex !== -1) {
-      return this.alunos[alunoIndex] = {}
+      this.alunos.splice(alunoIndex, 1)
+      const removido = this.alunos.splice(alunoIndex, 1)[0]
+      return removido
     }
 
     return "Aluno não encontrado"
