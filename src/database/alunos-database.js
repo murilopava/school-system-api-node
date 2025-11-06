@@ -16,19 +16,30 @@ export class DatabaseAlunos {
         let alunos
 
         if (id) {
-            alunos = await sql`SELECT * FROM alunos WHERE id = ${id}`
+            alunos = await sql`SELECT * FROM alunos WHERE id = ${id}`;
+            
+            if (alunos.length === 0) {
+                return null
+            }
+
         } else {
-            alunos = await sql`SELECT * FROM alunos` 
+            alunos = await sql`SELECT * FROM alunos` ;
         }
 
         return alunos
     }
 
     async put(id, nome, turma, notas) {
-    
-        const media = calcularMedia(notas)
-        return await sql`UPDATE alunos SET nome = ${nome}, turma = ${turma}, notas = ${notas}, media = ${media} WHERE id = ${id}`
+    const media = calcularMedia(notas)
 
-        return console.log('não encontrou!')
+    const atualizado = await sql`UPDATE alunos SET nome = ${nome},turma = ${turma},notas = ${sql.json(notas)},media = ${media}WHERE id = ${id} RETURNING *;`
+
+    return atualizado.length > 0 ? atualizado[0] : null
+  }
+
+  async delete(id) {
+    const removido = await sql`DELETE FROM alunosWHERE id = ${id} RETURNING *;`
+
+    return removido.length > 0 ? removido[0] : null
   }
 }

@@ -1,4 +1,4 @@
-POST http://localhost:3000/aluno
+POST http://localhost:3000/alunos
 Content-Type: application/json
 
 {
@@ -17,19 +17,19 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:3000/aluno/a28c3052-5b1d-4eec-b6c9-12202cc1ba18
+PUT http://localhost:3000/alunos/a61d6c75-9177-4687-bc3f-200f0bbf5423
 Content-Type: application/json
 
 {
-    "nome": "Matheus",
-    "turma": "2B",
+    "nome": "Lucas",
+    "turma": "2A",
     "notas": [
         {"disciplina": "matemática", "nota": 8},
         {"disciplina": "história", "nota": 9},
-        {"disciplina": "biologia", "nota": 6}
+        {"disciplina": "português", "nota": 5}
     ] 
 }
 
 ###
 
-DELETE http://localhost:3000/aluno/4b789bb2-b227-4964-84bd-e450582ff223
+DELETE http://localhost:3000/alunos/4b789bb2-b227-4964-84bd-e450582ff223
