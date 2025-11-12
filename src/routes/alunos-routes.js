@@ -16,8 +16,7 @@ export async function alunosRoutes (server, dbAlunos) {
         return reply.status(200).send(alunos)
     })
 
-    server.post('/alunos/cadastrar', async (request, reply) => {
-        
+    server.post('/alunos/cadastrar', async (request, reply) => {    
         const aluno = request.body
         
         await dbAlunos.create(aluno)

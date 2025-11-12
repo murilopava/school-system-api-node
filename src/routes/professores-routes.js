@@ -1,3 +1,5 @@
+import { validarProfessores } from '../validators/professores-validator.js'
+
 export async function professoresRoutes(server, dbProfessores) {
 
     server.get('/professores', async (request, reply) => {
@@ -16,13 +18,24 @@ export async function professoresRoutes(server, dbProfessores) {
     })
 
     server.post('/professores/cadastrar', async (request, reply) => {
-        const professor = request.body
+        try {
+            const professor = request.body
+            validarProfessores(professor)
 
-        const novoProfessor = await dbProfessores.create(professor)
-        
-        reply.status(201).send({message: "Novo professor cadastrado!",
-            professor: novoProfessor
-        })
+            if (!nome || !turma || !disciplina) {
+                return reply.status(400).send({message: 'Preencha todos os campos'})
+            }
+            const novoProfessor = await dbProfessores.create(professor)
+
+            reply.status(201).send({
+                message: "Novo professor cadastrado!",
+                professor: novoProfessor
+            })
+
+        } catch (err) {
+            console.error('Erro ao cadastrar professor:', err)
+            return reply.status(500).send({message: 'Erro interno no servidor'})
+        }
     })
 
     server.put('/professores/atualizar/:id', async (request, reply) => {
@@ -35,7 +48,8 @@ export async function professoresRoutes(server, dbProfessores) {
             return reply.status(404).send({message: "Professor não encontrado"})
         }
 
-        reply.status(200).send({message: "Professor atualizado!",
+        reply.status(200).send({
+            message: "Professor atualizado!",
             professor: professorAtualizado.nome
         })
 

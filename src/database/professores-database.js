@@ -6,10 +6,8 @@ export class DatabaseProfessores {
         return await sql`SELECT * FROM professores`
     }
 
-    async create(professor) {
+    async create({nome, turma, disciplina}) {
         const id = randomUUID()
-
-        const {nome, turma, disciplina} = professor
         await sql`INSERT INTO professores (id, nome, turma, disciplina) VALUES (${id}, ${nome}, ${turma}, ${disciplina})`
     }
 
@@ -23,8 +21,7 @@ export class DatabaseProfessores {
         return professor
     }
 
-    async put(id, professor) {
-        const {nome, turma, disciplina} = professor
+    async put(id, {nome, turma, disciplina}) {
 
         const atualizado = await sql`UPDATE professores SET nome = ${nome}, turma = ${turma}, disciplina = ${disciplina} WHERE id = ${id} RETURNING *`
 
