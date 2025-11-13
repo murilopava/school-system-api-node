@@ -1,5 +1,7 @@
 import { validarProfessores } from '../validators/professores-validator.js'
 
+const validator = new validarProfessores
+
 export async function professoresRoutes(server, dbProfessores) {
 
     server.get('/professores', async (request, reply) => {
@@ -20,7 +22,7 @@ export async function professoresRoutes(server, dbProfessores) {
     server.post('/professores/cadastrar', async (request, reply) => {
         try {
             const professor = request.body
-            validarProfessores(professor)
+            validator.entrada(professor)
 
             if (!nome || !turma || !disciplina) {
                 return reply.status(400).send({message: 'Preencha todos os campos'})
