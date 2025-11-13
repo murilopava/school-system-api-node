@@ -1,32 +1,42 @@
-import { validarProfessores } from '../validators/professores-validator.js'
+import { validarEntrada } from '../validators/validators.js'
 
-const validator = new validarProfessores
+const validator = new validarEntrada
 
 export async function professoresRoutes(server, dbProfessores) {
 
     server.get('/professores', async (request, reply) => {
         const professores = await dbProfessores.list()
+
+        if (professores.length === 0) {
+            return reply.status(200).send({message: 'Nenhum professor cadastrado!'})
+        }
+
         reply.status(200).send(professores) 
     })
 
     server.get('/professores/:id', async (request, reply) => {
-        const id = request.params.id
-        const professores = await dbProfessores.search(id)
-        if(!professores) {
-            return reply.status(404).send({message: "Professor não encontrado!"})
-        }
+        try {
+            const id = request.params.id
 
-        reply.status(200).send(professores)
+            validator.id(id)
+
+            const professores = await dbProfessores.search(id)
+            if(!professores) {
+                return reply.status(404).send({message: "Professor não encontrado!"})
+            }
+    
+            reply.status(200).send(professores)
+        } catch (err) {
+            console.log('Erro ao procurar id', err)
+            reply.status(500).send({message: 'Erro: ID não encontrado!'})
+        }
     })
 
     server.post('/professores/cadastrar', async (request, reply) => {
         try {
             const professor = request.body
-            validator.entrada(professor)
+            validator.entradaProfessores(professor)
 
-            if (!nome || !turma || !disciplina) {
-                return reply.status(400).send({message: 'Preencha todos os campos'})
-            }
             const novoProfessor = await dbProfessores.create(professor)
 
             reply.status(201).send({
@@ -41,32 +51,48 @@ export async function professoresRoutes(server, dbProfessores) {
     })
 
     server.put('/professores/atualizar/:id', async (request, reply) => {
-        const id = request.params.id
-        const professor = request.body
+        try {
+            const id = request.params.id
 
-        const professorAtualizado = await dbProfessores.put(id, professor)
+            validator.id(id)
+        
+            const professor = request.body
 
-        if(!professorAtualizado) {
-            return reply.status(404).send({message: "Professor não encontrado"})
+            validator.entradaProfessores(professor)
+    
+            const professorAtualizado = await dbProfessores.put(id, professor)
+    
+            if(!professorAtualizado) {
+                return reply.status(404).send({message: "Professor não encontrado"})
+            }
+    
+            reply.status(200).send({
+                message: "Professor atualizado!",
+                professor: professorAtualizado.nome
+            })
+        } catch (err) {
+            console.log('Erro ao atualizar: ', err)
+            reply.status(500).send({message: 'Erro no servidor interno'})
         }
-
-        reply.status(200).send({
-            message: "Professor atualizado!",
-            professor: professorAtualizado.nome
-        })
 
     })
     
     server.delete('/professores/deletar/:id', async  (request, reply) => {
-        const id = request.params.id
+        try {
+            const id = request.params.id
+            validator.id(id)
 
-        const deletado = await dbProfessores.delete(id)
-        if (!deletado) {
-            return reply.status(404).send({message: "Professor não encontrado"})
-        }
-
-        reply.status(200).send({
-            message: "Professor deletado",
-            professor: deletado[0]})
+            const deletado = await dbProfessores.delete(id)
+            if (!deletado) {
+                return reply.status(404).send({message: "Professor não encontrado"})
+            }
+    
+            reply.status(200).send({
+                message: "Professor deletado",
+                professor: deletado[0]})
+            } catch (err) {
+                console.log('Erro ao deletar: ', err)
+                reply.status(500).send({message: 'Erro no servidor interno'})
+            }
     })
 }
