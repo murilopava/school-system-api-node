@@ -59,6 +59,11 @@ export async function alunosRoutes (server, dbAlunos) {
             const id = request.params.id
             validator.id(id)
 
+            const alunoBuscado = await dbAlunos.search(id)
+            if (!alunoBuscado) {
+                return reply.status(404).send({message: 'Aluno não encontrado!'})
+            }
+
             const aluno = new UpdateAlunoDto(request.body)
             validator.validarAluno(aluno)
             

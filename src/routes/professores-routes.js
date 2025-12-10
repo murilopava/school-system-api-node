@@ -71,6 +71,11 @@ export async function professoresRoutes(server, dbProfessores) {
             const id = request.params.id
 
             validator.id(id)
+
+            const professores = await dbProfessores.search(id)
+            if(!professores) {
+                return reply.status(404).send({message: "Professor não encontrado!"})
+            }
         
             const professor = new UpdateProfessorDto(request.body)
 
