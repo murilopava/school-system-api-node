@@ -1,4 +1,5 @@
-import { validarEntrada } from '../validators/validators.js'
+import { validarEntrada } from '../schemas/schema.js'
+import { CreateAlunoDto, UpdateAlunoDto } from '../dto/alunos-dto.js'
 
 const validator = new validarEntrada
 
@@ -18,12 +19,12 @@ export async function alunosRoutes (server, dbAlunos) {
         try {
             const id = request.params.id
         
-            const alunos = await dbAlunos.search(id)
-            if (!alunos) {
+            const alunoBuscado = await dbAlunos.search(id)
+            if (!alunoBuscado) {
                 return reply.status(404).send({message: 'Aluno não encontrado!'})
             }
         
-            return reply.status(200).send(alunos)
+            return reply.status(200).send(alunoBuscado)
         } catch (err) {
             console.log('Erro ao encontrar aluno, ', err)
             reply.status(500).send({
@@ -35,14 +36,15 @@ export async function alunosRoutes (server, dbAlunos) {
 
     server.post('/alunos/cadastrar', async (request, reply) => {    
         try {
-            const aluno = request.body
-            validator.validarAluno(aluno)
+            const novoAluno = new CreateAlunoDto(request.body)
+
+            validator.validarAluno(novoAluno)
     
-            await dbAlunos.create(aluno)
+            const alunoCriado = await dbAlunos.create(novoAluno)
     
             return reply.status(201).send({
                 message: 'Aluno novo cadastrado',
-                aluno: request.body})
+                aluno: alunoCriado})
 
         } catch (err) {
             console.log('Erro ao cadastrar aluno, ', err)
@@ -57,7 +59,7 @@ export async function alunosRoutes (server, dbAlunos) {
             const id = request.params.id
             validator.id(id)
 
-            const aluno = request.body
+            const aluno = new UpdateAlunoDto(request.body)
             validator.validarAluno(aluno)
             
             const alunoAtualizado = await dbAlunos.put(id, aluno.nome, aluno.turma, aluno.notas)

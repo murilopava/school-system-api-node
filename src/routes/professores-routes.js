@@ -1,4 +1,6 @@
-import { validarEntrada } from '../validators/validators.js'
+import { validarEntrada } from '../schemas/schema.js'
+import { CreateProfessorDto, UpdateProfessorDto} from '../dto/professores-dto.js'
+import { ZodError } from 'zod'
 
 const validator = new validarEntrada
 
@@ -37,18 +39,26 @@ export async function professoresRoutes(server, dbProfessores) {
 
     server.post('/professores/cadastrar', async (request, reply) => {
         try {
-            const professor = request.body
-            validator.entradaProfessores(professor)
+            const novoProfessor = new CreateProfessorDto(request.body)
+            validator.validarProfessor(novoProfessor)
 
-            const novoProfessor = await dbProfessores.create(professor)
+            const professorCriado = await dbProfessores.create(novoProfessor)
 
             reply.status(201).send({
                 message: "Novo professor cadastrado!",
-                professor: novoProfessor
+                professor: professorCriado
             })
 
         } catch (err) {
-            console.error('Erro ao cadastrar professor:', err)
+            
+             if (err instanceof ZodError) {
+
+            return reply.status(400).send({
+                message: "Erro de validação",
+                erros: err.message
+            })
+        }
+
             return reply.status(500).send({
                 message: 'Erro ao cadastrar professor',
                 Erro: err.message
@@ -62,9 +72,9 @@ export async function professoresRoutes(server, dbProfessores) {
 
             validator.id(id)
         
-            const professor = request.body
+            const professor = new UpdateProfessorDto(request.body)
 
-            validator.entradaProfessores(professor)
+            validator.validarProfessor(professor)
     
             const professorAtualizado = await dbProfessores.put(id, professor)
     
@@ -74,7 +84,7 @@ export async function professoresRoutes(server, dbProfessores) {
     
             reply.status(200).send({
                 message: "Professor atualizado!",
-                professor: professorAtualizado.nome
+                professor: professor.nome
             })
         } catch (err) {
             console.log('Erro ao atualizar: ', err)
@@ -100,7 +110,6 @@ export async function professoresRoutes(server, dbProfessores) {
                 message: "Professor deletado",
                 professor: deletado[0]})
             } catch (err) {
-                console.log('Erro ao deletar: ', err)
                 reply.status(500).send({
                 message: 'Erro ao deletar professor',
                 Erro: err.message
