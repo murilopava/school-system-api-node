@@ -77,7 +77,7 @@ Cada operação (criação, atualização, etc.) possui seu próprio DTO.
 
 ---
 
-## 🗄 Banco de Dados (PostgreSQL)
+##  Banco de Dados (PostgreSQL)
 
 A aplicação utiliza **PostgreSQL** como banco de dados relacional.
 
@@ -116,3 +116,4 @@ Este projeto foi desenvolvido com foco em:
 - Uso profissional de DTOs
 - Organização por camadas
 - Código limpo, escalável e de fácil manutenção
+
