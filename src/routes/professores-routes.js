@@ -1,6 +1,5 @@
 import { validarEntrada } from '../schemas/schema.js'
 import { CreateProfessorDto, UpdateProfessorDto} from '../dto/professores-dto.js'
-import { ZodError } from 'zod'
 
 const validator = new validarEntrada
 
@@ -50,15 +49,6 @@ export async function professoresRoutes(server, dbProfessores) {
             })
 
         } catch (err) {
-            
-             if (err instanceof ZodError) {
-
-            return reply.status(400).send({
-                message: "Erro de validação",
-                erros: err.message
-            })
-        }
-
             return reply.status(500).send({
                 message: 'Erro ao cadastrar professor',
                 Erro: err.message
