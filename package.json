@@ -6,7 +6,7 @@
     "postgres": "^3.4.7",
     "zod": "^4.1.12"
   },
-  "name": "sistema-escolar",
+  "name": "school-system-api-node",
   "version": "1.0.0",
   "description": "",
   "type": "module",
